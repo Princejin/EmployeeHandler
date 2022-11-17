@@ -63,7 +63,7 @@ public class EmployeeService {
 		}
 		else
 		{
-			throw new EmployeeException("Employee with Id: "+employeeId+ "doesn't exist");
+			throw new EmployeeException("Employee with Id:"+employeeId+ "doesn't exist");
 		}
 	}
 

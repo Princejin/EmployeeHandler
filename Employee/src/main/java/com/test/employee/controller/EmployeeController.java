@@ -17,6 +17,11 @@ import com.test.employee.exceptions.EmployeeException;
 import com.test.employee.model.Employee;
 import com.test.employee.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -27,7 +32,11 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService employeeService;
 
-	
+	@ApiResponses(value= {
+			@ApiResponse(responseCode = "201", description = "Creates new employee in the System", content = {
+					@Content(mediaType = "application/json", schema= @Schema(implementation = Employee.class))
+			})
+	})
 	@PostMapping(consumes = {"application/json"}, produces = {"application/json"}, path = "/createEmployee")
 	public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee)
 	{
@@ -35,6 +44,12 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(resultEmployee, HttpStatus.CREATED);
 	}
 
+	@ApiResponses(value= {
+			@ApiResponse(responseCode = "200", description = "Retrive existing employee from the System based on employee id provided", content = {
+					@Content(mediaType = "application/json", schema= @Schema(implementation = Employee.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Employee with provided id doesnot exist")
+	})
 	@GetMapping(produces = {"application/json"}, path = "/readEmployee/{employeeId}")
 	public ResponseEntity<?> getEmployee(@PathVariable Integer employeeId) throws EmployeeException
 	{
@@ -43,9 +58,16 @@ public class EmployeeController {
 		{
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
-		throw new EmployeeException("Employee with Id: "+employeeId+ "doesn't exist");
+		throw new EmployeeException("Employee with Id:"+employeeId+ " doesn't exist");
 	}
 
+	@ApiResponses(value= {
+			@ApiResponse(responseCode = "200", description = "Update existing employee attributes present in system", content = {
+					@Content(mediaType = "application/json", schema= @Schema(implementation = Employee.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Employee with provided id doesnot exist")
+	})
+	@GetMapping(produces = {"application/json"}, path = "/readEmployee/{employeeId}")
 	@PutMapping(consumes = {"application/json"}, produces = {"application/json"}, path = "/updateEmployee/{employeeId}")
 	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee, @PathVariable Integer employeeId) throws EmployeeException
 	{
@@ -53,6 +75,10 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(resultEmployee, HttpStatus.OK);
 	}
 
+	@ApiResponses(value= {
+			@ApiResponse(responseCode = "200", description = "Deletes the employee with provided Id")
+	})
+	@GetMapping(produces = {"application/json"}, path = "/readEmployee/{employeeId}")
 	@DeleteMapping(path = "/deleteEmployee/{employeeId}")
 	public ResponseEntity deleteEmployee(@PathVariable  Integer employeeId)
 	{
