@@ -63,13 +63,21 @@ public class EmployeeService {
 		}
 		else
 		{
-			throw new EmployeeException("Employee with Id:"+employeeId+ "doesn't exist");
+			throw new EmployeeException("Employee with Id:"+employeeId+ " doesn't exist");
 		}
 	}
 
-	public void deleteEmployeeById(Integer employeeId)
+	public void deleteEmployeeById(Integer employeeId) throws EmployeeException
 	{
-		employeeDao.deleteById(employeeId);
+		Optional<Employee> optional = employeeDao.findById(employeeId);
+		if(optional.isPresent())
+		{
+			employeeDao.deleteById(employeeId);
+		}
+		else
+		{
+			throw new EmployeeException("Employee with Id:"+employeeId+ " doesn't exist");
+		}
 	}
 
 

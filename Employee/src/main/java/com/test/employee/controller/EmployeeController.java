@@ -67,7 +67,6 @@ public class EmployeeController {
 			}),
 			@ApiResponse(responseCode = "400", description = "Employee with provided id doesnot exist")
 	})
-	@GetMapping(produces = {"application/json"}, path = "/readEmployee/{employeeId}")
 	@PutMapping(consumes = {"application/json"}, produces = {"application/json"}, path = "/updateEmployee/{employeeId}")
 	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee, @PathVariable Integer employeeId) throws EmployeeException
 	{
@@ -76,11 +75,11 @@ public class EmployeeController {
 	}
 
 	@ApiResponses(value= {
-			@ApiResponse(responseCode = "200", description = "Deletes the employee with provided Id")
+			@ApiResponse(responseCode = "200", description = "Deletes the employee with provided Id"),
+			@ApiResponse(responseCode = "400", description = "Employee with provided id doesnot exist")
 	})
-	@GetMapping(produces = {"application/json"}, path = "/readEmployee/{employeeId}")
 	@DeleteMapping(path = "/deleteEmployee/{employeeId}")
-	public ResponseEntity deleteEmployee(@PathVariable  Integer employeeId)
+	public ResponseEntity deleteEmployee(@PathVariable  Integer employeeId) throws EmployeeException
 	{
 		employeeService.deleteEmployeeById(employeeId);
 		return ResponseEntity.ok().build();
